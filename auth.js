@@ -37,16 +37,18 @@ module.exports.verify = (req, res, next) => {
   });
 };
 
-module.exports.errorHandler = (req, res, next) => {
+module.exports.errorHandler = (err, req, res, next) => {
   console.log(err);
 
   const errorMessage = err.message || "Internal Server Error";
   const statusCode = err.status || 500;
 
-  req.status(statusCode).json({
-    message: errorMessage,
-    errorCode: err.code,
-    details: err.details,
+  res.status(statusCode).json({
+    error: {
+      message: errorMessage,
+      errorCode: err.code || "SERVER_ERROR",
+      details: err.details || null,
+    },
   });
 };
 
