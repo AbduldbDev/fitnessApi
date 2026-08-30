@@ -85,3 +85,5 @@ module.exports.details = (req, res) => {
     })
     .catch((err) => errorHandler(err, req, res));
 };
+
+

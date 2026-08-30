@@ -52,3 +52,30 @@ module.exports.getMyWorkouts = (req, res) => {
     })
     .catch((err) => errorHandler(err, req, res));
 };
+
+module.exports.deleteWorkout = (req, res) => {
+  const { workoutId } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(workoutId)) {
+    return res.status(400).send({
+      message: "Invalid workout ID",
+    });
+  }
+
+  return Workout.findOneAndDelete({
+    _id: workoutId,
+    userId: req.user.id,
+  })
+    .then((workout) => {
+      if (!workout) {
+        return res.status(404).send({
+          message: "Workout not found",
+        });
+      }
+
+      return res.status(200).send({
+        message: "Workout deleted successfully",
+      });
+    })
+    .catch((err) => errorHandler(err, req, res));
+};
